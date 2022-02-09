@@ -20,19 +20,7 @@ public class CallweatherapiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CallweatherapiApplication.class, args);
 		//useExchangeMethodsOfRestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.add("X-Rapidapi-Host", "weatherapi-com.p.rapidapi.com");
-		headers.add("X-Rapidapi-Key", "35860790bbmshcee53cc2df3ebd0p14cf8bjsn6e36e8d03e7d");
-		
-		HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
-		
-		ResponseEntity<String> responseEntity = restTemplate.exchange("https://weatherapi-com.p.rapidapi.com/current.json?q=huntington beach",HttpMethod.GET,requestEntity,String.class);
-		//HttpStatus statusCode = responseEntity.getStatusCode();
-		//System.out.println("status code - " + statusCode);
-		currentweather = responseEntity.getBody();
-		//System.out.println("response body - " + currentweather);
-		
+			
 	}
 
 	//private static void useExchangeMethodsOfRestTemplate() {
@@ -42,10 +30,22 @@ public class CallweatherapiApplication {
 		
 	//}
 	
-	@GetMapping("/hello")
+	@GetMapping("/weather")
 	
-	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-	//return String.format("Hello %s!", name);
-	return String.format("Hello %s ji! Today's weather forecast -" + currentweather, name);
+	public String hello(@RequestParam(value = "city", defaultValue = "World") String city) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add("X-Rapidapi-Host", "weatherapi-com.p.rapidapi.com");
+		headers.add("X-Rapidapi-Key", "35860790bbmshcee53cc2df3ebd0p14cf8bjsn6e36e8d03e7d");
+		
+		HttpEntity<Object> requestEntity = new HttpEntity<>(headers);
+		
+		ResponseEntity<String> responseEntity = restTemplate.exchange("https://weatherapi-com.p.rapidapi.com/current.json?q="+ city,HttpMethod.GET,requestEntity,String.class);
+		//HttpStatus statusCode = responseEntity.getStatusCode();
+		//System.out.println("status code - " + statusCode);
+		currentweather = responseEntity.getBody();
+		//System.out.println("response body - " + currentweather);
+		
+	return String.format("Here is your weather forecast for %s City -" + currentweather, city);
 	}
 }
